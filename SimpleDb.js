@@ -1,4 +1,4 @@
-const { writeFile, readFile, readdir } = require('fs/promises');
+const { writeFile, readFile, readdir, rm } = require('fs/promises');
 const { nanoid } = require('nanoid');
 const path = require('path');
 
@@ -32,6 +32,11 @@ class SimpleDb {
   getAll() {
     return readdir(this.rootDir)
       .then(files => Promise.all(files.map(file => this.readJsonFile(file))));
+  }
+
+  remove(id) {
+    const filePath = path.join(this.rootDir, `${id}.json`);
+    return rm(filePath, { force: true });
   }
 }
 

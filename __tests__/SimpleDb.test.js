@@ -1,4 +1,4 @@
-const { rm, mkdir } = require('fs/promises');
+const { rm, mkdir, readdir } = require('fs/promises');
 const SimpleDb = require('../SimpleDb.js');
 
 describe('SimpleDb', () => {
@@ -44,5 +44,18 @@ describe('SimpleDb', () => {
       .then(() => simpleDb.save(obj2))
       .then(() => simpleDb.getAll())
       .then(actual => expect(actual).toEqual(expect.arrayContaining([obj1, obj2])));
+  });
+
+  test('SimpleDb can remove an object', () => {
+    const obj = {
+      abc: 123,
+      bob: 'bobbert'
+    };
+
+    const simpleDb = new SimpleDb(rootDir);
+    return simpleDb.save(obj)
+      .then(() => simpleDb.remove(obj.id))
+      .then(() => readdir(rootDir))
+      .then(files => expect(files).not.toEqual(expect.arrayContaining([`${obj.id}.json`])));
   });
 });
