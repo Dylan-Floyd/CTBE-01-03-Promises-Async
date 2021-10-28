@@ -58,4 +58,29 @@ describe('SimpleDb', () => {
       .then(() => readdir(rootDir))
       .then(files => expect(files).not.toEqual(expect.arrayContaining([`${obj.id}.json`])));
   });
+
+  test('SimpleDB can update an object', () => {
+    const obj1 = {
+      abc: 123,
+      bob: 'bobbert'
+    };
+
+    const obj2 = {
+      abc: 123,
+      bob: 'rob'
+    };
+
+    const expected = Object.assign(
+      {
+        id: expect.any(String)
+      },
+      obj2
+    );
+
+    const simpleDb = new SimpleDb(rootDir);
+    return simpleDb.save(obj1)
+      .then(() => simpleDb.update(obj1.id, obj2))
+      .then(() => simpleDb.get(obj1.id))
+      .then(actual => expect(actual).toEqual(expected));
+  });
 });

@@ -9,8 +9,7 @@ class SimpleDb {
 
   save(obj) {
     obj.id = nanoid();
-    const objPath = path.join(this.rootDir, `${obj.id}.json`);
-    return writeFile(objPath, JSON.stringify(obj));
+    return this.writeToId(obj.id, obj);
   }
 
   get(id) {
@@ -37,6 +36,16 @@ class SimpleDb {
   remove(id) {
     const filePath = path.join(this.rootDir, `${id}.json`);
     return rm(filePath, { force: true });
+  }
+
+  writeToId(id, obj) {
+    const objPath = path.join(this.rootDir, `${id}.json`);
+    return writeFile(objPath, JSON.stringify(obj));
+  }
+
+  update(id, newObj) {
+    newObj.id = id;
+    return this.writeToId(id, newObj);
   }
 }
 
