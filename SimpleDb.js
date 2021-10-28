@@ -34,18 +34,20 @@ class SimpleDb {
   }
 
   remove(id) {
-    const filePath = path.join(this.rootDir, `${id}.json`);
-    return rm(filePath, { force: true });
+    return rm(this.getObjectpath(id), { force: true });
   }
 
   writeToId(id, obj) {
-    const objPath = path.join(this.rootDir, `${id}.json`);
-    return writeFile(objPath, JSON.stringify(obj));
+    return writeFile(this.getObjectpath(id), JSON.stringify(obj));
   }
 
   update(id, newObj) {
     newObj.id = id;
     return this.writeToId(id, newObj);
+  }
+
+  getObjectpath(id) {
+    return path.join(this.rootDir, `${id}.json`);
   }
 }
 
