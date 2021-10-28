@@ -59,7 +59,7 @@ describe('SimpleDb', () => {
       .then(files => expect(files).not.toEqual(expect.arrayContaining([`${obj.id}.json`])));
   });
 
-  test('SimpleDB can update an object', () => {
+  test('SimpleDb can update an object', () => {
     const obj1 = {
       abc: 123,
       bob: 'bobbert'
@@ -82,5 +82,11 @@ describe('SimpleDb', () => {
       .then(() => simpleDb.update(obj1.id, obj2))
       .then(() => simpleDb.get(obj1.id))
       .then(actual => expect(actual).toEqual(expected));
+  });
+
+  test('SimpleDb returns null when getting a non-existent object', () => {
+    const simpleDb = new SimpleDb(rootDir);
+    return simpleDb.get('bob')
+      .then(actual => expect(actual).toEqual(null));
   });
 });
